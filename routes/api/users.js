@@ -7,6 +7,8 @@ const jsonWT = require("jsonwebtoken");
 const { check, validationResult } = require("express-validator/check");
 const User = require("../../models/User");
 
+/** Method to sign-up a user */
+
 // @route   POST api/users
 // @desc    Register user
 // @access  Public
@@ -29,6 +31,7 @@ router.post(
     const { name, email, password } = req.body;
 
     try {
+      // Search for user by email - hence why emails must be unique in the schema and the if statement immediately below
       let user = await User.findOne({ email });
 
       if (user) {
@@ -43,7 +46,7 @@ router.post(
         d: "mm",
       });
 
-      // Creates a new instance, but does not save it to Mongo
+      // Creates a new instance of mongoose schema, but does not save it to Mongo
       user = new User({
         name,
         email,
@@ -55,6 +58,7 @@ router.post(
 
       user.password = await bcrypt.hash(password, salt);
 
+      // Mongoose schema method
       await user.save();
 
       const payload = {
@@ -63,6 +67,7 @@ router.post(
         },
       };
 
+      // Create a JWT for the user to access private routes; this will likely need to be included for user creation and login
       jsonWT.sign(
         payload,
         config.get("jwtSecret"),
