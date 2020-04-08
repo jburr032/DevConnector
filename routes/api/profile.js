@@ -339,7 +339,7 @@ router.get("/github/:username", (req, res) => {
       if (error) console.error(error);
 
       if (response.statusCode !== 200) {
-        res.status(404).json({ msg: "No github profile exists." });
+        return res.status(404).json({ msg: "No github profile exists." });
       }
 
       res.json(JSON.parse(body));
