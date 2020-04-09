@@ -222,7 +222,7 @@ router.put(
 );
 
 // @route   DELETE api/profile/experience/:exp_id
-// @desc    Remove expereience from profile
+// @desc    Remove experience from profile
 //@access   Private
 router.delete("/experience/:exp_id", auth, async (req, res) => {
   try {
