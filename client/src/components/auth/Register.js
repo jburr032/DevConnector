@@ -1,44 +1,32 @@
 import React, { useState } from "react";
+import { Link } from "react-router-dom";
+import { connect } from "react-redux";
+import { setAlert } from "../../actions/alert";
+import { register } from "../../actions/auth";
 import axios from "axios";
+import PropTypes from "prop-types";
 
-export const Register = () => {
+const Register = ({ setAlert, register }) => {
   const [formData, setFormData] = useState({
     name: "",
     email: "",
-    password1: "",
+    password: "",
     password2: "",
   });
 
-  const { name, email, password1, password2 } = formData;
+  const { name, email, password, password2 } = formData;
 
   const onChange = (e) =>
     setFormData({ ...formData, [e.target.name]: e.target.value });
 
   const onSubmit = async (e) => {
     e.preventDefault();
-    if (password1 !== password2) {
-      console.log("Passwords do not match");
+    if (password !== password2) {
+      // Actions are passed down to the Register component through the connect() function
+      // This binds Redux to React component
+      setAlert("Passwords do not match", "danger");
     } else {
-      const newUser = {
-        name,
-        email,
-        password1,
-      };
-
-      try {
-        const config = {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        };
-
-        const body = JSON.stringify(newUser);
-
-        const res = await axios.post("/api/users", body, config);
-        console.log(res.data);
-      } catch (err) {
-        console.error(err.response.data);
-      }
+      register({ name, email, password });
     }
   };
 
@@ -59,7 +47,6 @@ export const Register = () => {
             value={name}
             onChange={(e) => onChange(e)}
             name='name'
-            required
           />
         </div>
         <div className='form-group'>
@@ -67,7 +54,6 @@ export const Register = () => {
             type='email'
             placeholder='Email Address'
             name='email'
-            required
             value={email}
             onChange={(e) => onChange(e)}
             name='email'
@@ -81,9 +67,8 @@ export const Register = () => {
           <input
             type='password'
             placeholder='Password'
-            name='password1'
-            minLength='6'
-            value={password1}
+            name='password'
+            value={password}
             onChange={(e) => onChange(e)}
           />
         </div>
@@ -92,7 +77,6 @@ export const Register = () => {
             type='password'
             placeholder='Confirm Password'
             name='password2'
-            minLength='6'
             value={password2}
             onChange={(e) => onChange(e)}
           />
@@ -100,8 +84,15 @@ export const Register = () => {
         <input type='submit' className='btn btn-primary' value='Register' />
       </form>
       <p className='my-1'>
-        Already have an account? <a href='login.html'>Sign In</a>
+        Already have an account? <Link to='/login'>Sign In</Link>
       </p>
     </>
   );
 };
+
+Register.propTypes = {
+  setAlert: PropTypes.func.isRequired,
+  register: PropTypes.func.isRequired,
+};
+// Binds action to React component by allowing the component to acccess setAlert via props
+export default connect(null, { setAlert, register })(Register);
