@@ -9,7 +9,7 @@ const bcrypt = require("bcryptjs");
 // Import the User schema object
 const User = require("../../models/User");
 
-// @route   POST api/auth
+// @route   GET api/auth
 // @desc    Test route
 // @access  Public
 
