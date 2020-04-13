@@ -6,12 +6,14 @@ import {
   AUTH_ERR,
   LOGIN_SUCCESS,
   LOGIN_FAIL,
+  LOGOUT,
 } from "./types";
 import { setAlert } from "./alert";
 import setAuthToken from "../utils/setAuthToken";
 
 // Load User
 export const loadUser = () => async (dispatch) => {
+  // If there is a token in localStorage then it will set it to the axios header so that the user does not need to re-authenticate all of the time
   if (localStorage.token) {
     setAuthToken(localStorage.token);
   }
@@ -32,17 +34,23 @@ export const loadUser = () => async (dispatch) => {
 
 // Register User
 export const register = ({ name, email, password }) => async (dispatch) => {
+  // We want to set the header and body for the axios api call
+
+  // Set the content-type here for axios, enabling the user to have this stored throughout the website
   const config = {
     headers: {
       "Content-Type": "application/json",
     },
   };
 
+  // Convert inputted data to json and assignign to body to pass in api request
   const body = JSON.stringify({ name, email, password });
 
   try {
+    // Returns token
     const res = await axios.post("/api/users", body, config);
 
+    // Call dispatch to set the Redux state: res.data is the token, and specify the type
     dispatch({
       type: REGISTER_SUCCESS,
       payload: res.data,
@@ -64,6 +72,7 @@ export const register = ({ name, email, password }) => async (dispatch) => {
 
 // Login User
 export const login = (email, password) => async (dispatch) => {
+  // We want to set the header and body for the axios api call
   const config = {
     headers: {
       "Content-Type": "application/json",
@@ -85,6 +94,7 @@ export const login = (email, password) => async (dispatch) => {
     const errors = err.response.data.errors;
 
     if (errors) {
+      // Using forEach rather than map as map returns an array, we just want to operate on each element instead
       errors.forEach((error) => dispatch(setAlert(error.msg, "danger")));
     }
 
@@ -92,4 +102,9 @@ export const login = (email, password) => async (dispatch) => {
       type: LOGIN_FAIL,
     });
   }
+};
+
+// Logout / Clear Profile
+export const logout = () => (dispatch) => {
+  dispatch({ type: LOGOUT });
 };

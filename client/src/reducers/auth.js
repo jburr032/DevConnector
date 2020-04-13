@@ -5,8 +5,10 @@ import {
   AUTH_ERR,
   LOGIN_FAIL,
   LOGIN_SUCCESS,
+  LOGOUT,
 } from "../actions/types";
 
+// Each reducer file has a part of the state -- see alert for its state
 const initialState = {
   token: localStorage.getItem("token"),
   isAuthenticated: null,
@@ -15,6 +17,7 @@ const initialState = {
 };
 
 export default function (state = initialState, action) {
+  // Destructure 'action' obj
   const { type, payload } = action;
 
   switch (type) {
@@ -27,6 +30,7 @@ export default function (state = initialState, action) {
       };
     case REGISTER_SUCCESS:
     case LOGIN_SUCCESS:
+      // Sets returned token from axios call to localStorage()
       localStorage.setItem("token", payload.token);
       return {
         ...state,
@@ -37,6 +41,7 @@ export default function (state = initialState, action) {
     case REGISTER_FAIL:
     case AUTH_ERR:
     case LOGIN_FAIL:
+    case LOGOUT:
       localStorage.removeItem("token");
       return {
         ...state,
