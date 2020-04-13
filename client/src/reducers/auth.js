@@ -6,6 +6,7 @@ import {
   LOGIN_FAIL,
   LOGIN_SUCCESS,
   LOGOUT,
+  CLEAR_PROFILE,
 } from "../actions/types";
 
 // Each reducer file has a part of the state -- see alert for its state
@@ -47,6 +48,14 @@ export default function (state = initialState, action) {
         ...state,
         token: null,
         isAuthenticated: false,
+        loading: false,
+      };
+
+    case CLEAR_PROFILE:
+      return {
+        ...state,
+        profile: null,
+        repos: [],
         loading: false,
       };
     default:

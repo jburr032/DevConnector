@@ -3,7 +3,7 @@ const router = express.Router();
 const auth = require("../../middleware/auth");
 const Profile = require("../../models/Profile");
 const User = require("../../models/User");
-const { check, validationResult } = require("express-validator/check");
+const { check, validationResult } = require("express-validator");
 const request = require("request");
 const config = require("config");
 
@@ -39,8 +39,10 @@ router.post(
   [
     // Middleware validation techniques
     auth,
-    check("status", "Status is required").not().isEmpty(),
-    check("skills", "Skills is required").not().isEmpty(),
+    [
+      check("status", "Status is required").not().isEmpty(),
+      check("skills", "Skills is required").not().isEmpty(),
+    ],
   ],
   async (req, res) => {
     const errors = validationResult(req);
