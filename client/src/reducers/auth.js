@@ -7,6 +7,7 @@ import {
   LOGIN_SUCCESS,
   LOGOUT,
   CLEAR_PROFILE,
+  ACCOUNT_DELETED,
 } from "../actions/types";
 
 // Each reducer file has a part of the state -- see alert for its state
@@ -43,6 +44,7 @@ export default function (state = initialState, action) {
     case AUTH_ERR:
     case LOGIN_FAIL:
     case LOGOUT:
+    case ACCOUNT_DELETED:
       localStorage.removeItem("token");
       return {
         ...state,
