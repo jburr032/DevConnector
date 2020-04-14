@@ -3,7 +3,7 @@ const router = express.Router();
 const auth = require("../../middleware/auth");
 const Profile = require("../../models/Profile");
 const User = require("../../models/User");
-const { check, validationResult } = require("express-validator");
+const { check, validationResult } = require("express-validator/check");
 const request = require("request");
 const config = require("config");
 
@@ -29,15 +29,12 @@ router.get("/me", auth, async (req, res) => {
   }
 });
 
-/** Method to login */
-
 // @route   POST api/profile
 // @desc    Create or update user proifle
 // @access  Private
 router.post(
   "/",
   [
-    // Middleware validation techniques
     auth,
     [
       check("status", "Status is required").not().isEmpty(),
@@ -47,7 +44,7 @@ router.post(
   async (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-      return res.status(400).json({ errors: errors.array });
+      return res.status(400).json({ errors: errors.array() });
     }
 
     const {
@@ -183,7 +180,7 @@ router.put(
   async (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-      return res.status(400).json({ errors: err.array });
+      return res.status(400).json({ errors: errors.array() });
     }
 
     const {
@@ -262,7 +259,7 @@ router.put(
   async (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-      return res.status(400).json({ errors: err.array });
+      return res.status(400).json({ errors: errors.array() });
     }
 
     const {

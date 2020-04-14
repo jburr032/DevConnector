@@ -41,7 +41,7 @@ export const createProfile = (formData, history, edit = false) => async (
       payload: res.data,
     });
 
-    dispatch(setAlert(edit ? "Profile Updated" : "Profile Created"));
+    dispatch(setAlert(edit ? "Profile Updated" : "Profile Created", "success"));
 
     // Need to use history object instead of <Redirect /> because we cannot use it here
     if (!edit) {
