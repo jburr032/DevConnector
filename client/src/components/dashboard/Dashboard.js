@@ -17,9 +17,7 @@ const Dashboard = ({
     getCurrentProfile();
   }, [getCurrentProfile]);
 
-  return loading && profile === null ? (
-    <Spinner />
-  ) : (
+  return (
     <>
       {" "}
       <h1 className='large text-primary'>Dashboard</h1>{" "}
