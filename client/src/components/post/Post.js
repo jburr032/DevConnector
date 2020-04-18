@@ -22,9 +22,6 @@ const Post = ({ getPost, post: { post, loading }, match }) => {
       </Link>
       <PostItem post={post} showActions={false} />
       <CommentForm postId={post._id} />
-      {console.log(
-        `post.comments ${post.comments[0].text} ${post.comments[1].text}`
-      )}
       <div className='comments'>
         {post.comments.map((comment) => (
           <CommentItem key={comment._id} comment={comment} postId={post._id} />
